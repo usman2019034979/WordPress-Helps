@@ -6,9 +6,9 @@
 
 function custom_schedule( $schedules )
 {
-    $schedules[ 'every_115_minutes' ] = array(
+    $schedules[ 'every_115_seconds' ] = array(
         'interval' => 115,
-        'display'  => 'Every 115 minutes',
+        'display'  => 'Every 115 Seconds',
     );
 
     return $schedules;
@@ -19,7 +19,7 @@ function schedule_custom_event()
     add_filter( 'cron_schedules', 'custom_schedule' );
     if( !wp_next_scheduled( 'custom_event' ) )
     {
-        wp_schedule_event( time(), 'every_115_minutes', 'custom_event' );
+        wp_schedule_event( time(), 'every_115_seconds', 'custom_event' );
     }
 }
 add_action( 'init', 'schedule_custom_event' );
