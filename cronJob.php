@@ -8,7 +8,7 @@ function custom_schedule( $schedules )
 {
     $schedules[ 'every_115_minutes' ] = array(
         'interval' => 115,
-        'display'  => 'Every minutes',
+        'display'  => 'Every 115 minutes',
     );
 
     return $schedules;
