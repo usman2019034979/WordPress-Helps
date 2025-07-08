@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>WordPress Actions & Filters - Roman Urdu Explanation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px auto;
+            max-width: 900px;
+            padding: 0 20px;
+            background-color: #f9f9f9;
+            color: #222;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        code {
+            font-family: Consolas, monospace;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 15px 0;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background: #34495e;
+            color: #fff;
+        }
+        blockquote {
+            border-left: 4px solid #2980b9;
+            margin: 20px 0;
+            padding-left: 15px;
+            color: #555;
+            background: #eaf3fb;
+            font-style: italic;
+        }
+        .footer {
+            margin-top: 40px;
+            font-size: 0.9em;
+            color: #555;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>WordPress Actions aur Filters</h1>
+
+    <h2>1. Hooks Kya Hote Hain?</h2>
+    <p>WordPress mein <strong>hooks</strong> ek aisi technique hai jisme aap WordPress ke core ya plugin/theme ke beech kisi specific point par apni functions chala sakte ho.</p>
+    <p>Hooks do tareeqay ke hote hain:</p>
+    <ul>
+        <li><strong>Actions</strong></li>
+        <li><strong>Filters</strong></li>
+    </ul>
+
+    <h2>2. Actions Kya Hain?</h2>
+    <ul>
+        <li>Actions wo hooks hain jahan aap WordPress ko kehte ho:<br> <em>“Jab ye kaam ho raha ho, toh mera function bhi chalao”</em></li>
+        <li>Aap <code>add_action()</code> se apna function attach karte ho, aur <code>do_action()</code> se wo action fire hoti hai.</li>
+        <li>Actions <strong>koi value return nahi karte</strong>, balki <strong>extra kaam perform karte hain</strong> — jaise email bhejna, log likhna, ya koi additional HTML print karna.</li>
+    </ul>
+
+    <h3>Example:</h3>
+    <pre><code>// Function attach karna (add_action)
+add_action( 'after_post_created', 'send_post_email' );
+
+function send_post_email() {
+    // Email bhejne ka code yahan hoga
+    echo "Email sent!";
+}
+
+// Action fire karna (do_action)
+do_action( 'after_post_created' );
+</code></pre>
+
+    <h3>Key Points for Actions:</h3>
+    <ul>
+        <li><code>add_action()</code>: Function ko hook ke sath attach karta hai.</li>
+        <li><code>do_action()</code>: Hook ko fire karta hai aur sab attached functions chalata hai.</li>
+        <li>Actions me <strong>original kaam override nahi hota</strong>, bas extra kaam joda jata hai.</li>
+    </ul>
+
+    <h2>3. Filters Kya Hain?</h2>
+    <ul>
+        <li>Filters ka kaam hota hai <strong>kisi data/value ko modify karna</strong> ya <strong>override karna</strong>.</li>
+        <li>Aap <code>add_filter()</code> se function attach karte ho, aur <code>apply_filters()</code> se filter ko apply karte ho.</li>
+        <li>Filters <strong>value ko le kar, usko modify kar ke return karte hain</strong>.</li>
+    </ul>
+
+    <h3>Example:</h3>
+    <pre><code>// Function attach karna (add_filter)
+add_filter( 'product_price', function( $price ) {
+    return $price - 10; // 10 rupees discount
+});
+
+// Filter apply karna (apply_filters)
+$price = apply_filters( 'product_price', 100 );
+echo $price; // Output: 90
+</code></pre>
+
+    <h3>Key Points for Filters:</h3>
+    <ul>
+        <li>Filters <strong>value ko override kar sakte hain</strong>.</li>
+        <li>Filters me hamesha <strong>value return karni hoti hai</strong>.</li>
+        <li>Filters ko use karke aap WordPress ke default behavior ko customize kar sakte hain.</li>
+    </ul>
+
+    <h2>4. Actions aur Filters Mein Farq</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Feature</th>
+                <th>Actions</th>
+                <th>Filters</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Purpose</td>
+                <td>Extra kaam perform karna</td>
+                <td>Data/value ko modify karna</td>
+            </tr>
+            <tr>
+                <td>Function call</td>
+                <td><code>do_action()</code></td>
+                <td><code>apply_filters()</code></td>
+            </tr>
+            <tr>
+                <td>Hook attach</td>
+                <td><code>add_action()</code></td>
+                <td><code>add_filter()</code></td>
+            </tr>
+            <tr>
+                <td>Return value</td>
+                <td>Nahi (void)</td>
+                <td>Haan (modified value)</td>
+            </tr>
+            <tr>
+                <td>Override?</td>
+                <td>Nahi</td>
+                <td>Haan (value override hoti hai)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>5. Real World Scenario</h2>
+    <p>Maan lo <strong>Archive page</strong> pe aapka data grid mein show ho raha hai.</p>
+    <ul>
+        <li>Aap <code>do_action( 'my_custom_archive_grid', $args )</code> likhte ho.</li>
+        <li>Phir <code>add_action( 'my_custom_archive_grid', 'render_archive_grid', 10, 1 )</code> se us action ke sath apna function attach karte ho, jo data query karta hai aur grid ka markup banata hai.</li>
+        <li>Jab AJAX request aati hai with filters (like category), toh aap <code>do_action()</code> ke zariye wohi rendering logic dubara chala ke filtered HTML wapas bhejte ho.</li>
+    </ul>
+
+    <h2>6. Filters ke zariye Markup ko Customize Karna</h2>
+    <p>Aap markup ko direct <code>add_action()</code> mein generate kar sakte ho, magar agar aap chahte ho ke user us markup ko customize kar sake, toh aap <code>apply_filters()</code> ka use karte ho.</p>
+
+    <pre><code>function render_archive_grid( $args ) {
+    $markup = '&lt;div class="grid-item"&gt;Product Title&lt;/div&gt;';
+    $markup = apply_filters( 'custom_grid_item_markup', $markup, $args );
+    echo $markup;
+}
+add_action( 'my_custom_archive_grid', 'render_archive_grid', 10, 1 );
+</code></pre>
+
+    <p>User apni marzi se markup change kar sakta hai:</p>
+
+    <pre><code>add_filter( 'custom_grid_item_markup', function( $markup, $args ) {
+    return '&lt;div class="custom-grid-item"&gt;Apni Custom Title&lt;/div&gt;';
+}, 10, 2 );
+</code></pre>
+
+    <h2>7. Summary</h2>
+    <ul>
+        <li><strong>Action:</strong> Extra kaam karwana, original kaam ko override nahi karta.</li>
+        <li><strong>Filter:</strong> Value modify ya override karta hai.</li>
+        <li><code>add_action()</code> aur <code>add_filter()</code> se aap apne functions ko hooks ke sath attach karte hain.</li>
+        <li><code>do_action()</code> aur <code>apply_filters()</code> se aap hooks ko trigger karte hain.</li>
+    </ul>
+
+    <blockquote>
+        <p><em>Is explanation ko apne pass save kar lo, jab bhi WordPress hooks samajhne ki zarurat ho, asaani se refer kar lena.</em></p>
+        <p><strong>Agar mazeed koi confusion ho ya example chahiye ho toh batao! Main hamesha madad ke liye yahan hoon. 😊</strong></p>
+    </blockquote>
+
+    <div class="footer">
+        <p>Created by ChatGPT | WordPress Hooks Guide in Roman Urdu</p>
+    </div>
+
+</body>
+</html>

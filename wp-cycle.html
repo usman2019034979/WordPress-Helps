@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WordPress Lifecycle Flowchart</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .phase {
+      margin-bottom: 40px;
+    }
+    .box {
+      background: #f8f9fa;
+      padding: 20px;
+      border: 2px solid #0073aa;
+      border-radius: 8px;
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .arrow {
+      text-align: center;
+      font-size: 24px;
+      color: #0073aa;
+      margin-bottom: 10px;
+    }
+    h2 {
+      border-bottom: 2px solid #0073aa;
+      padding-bottom: 5px;
+      margin-top: 40px;
+    }
+    .filepath {
+      display: block;
+      font-size: 14px;
+      color: #666;
+      margin-top: 5px;
+      font-weight: normal;
+    }
+    .tree {
+      font-family: monospace;
+      font-size: 14px;
+      background: #f4f4f4;
+      padding: 10px;
+      border-radius: 8px;
+      border-left: 4px solid #0073aa;
+    }
+  </style>
+</head>
+<body class="container py-4">
+  <h1 class="text-primary mb-4">WordPress Lifecycle Flowchart (with File Map)</h1>
+
+  <div class="phase">
+    <h2>🌐 SYSTEM BOOT PHASE (Frontend + Admin)</h2>
+    <div class="box">index.php <span class="filepath">/index.php</span></div>
+    <div class="arrow">↓</div>
+    <div class="box">wp-blog-header.php <span class="filepath">/wp-blog-header.php</span></div>
+    <div class="arrow">↓</div>
+    <div class="box">wp-load.php <span class="filepath">/wp-load.php</span></div>
+    <div class="arrow">↓</div>
+    <div class="box">wp-config.php <span class="filepath">/wp-config.php</span></div>
+    <div class="arrow">↓</div>
+    <div class="box">wp-settings.php <span class="filepath">/wp-settings.php</span></div>
+    <div class="arrow">↓</div>
+    <div class="box">Load MU Plugins <span class="filepath">/wp-content/mu-plugins/</span></div>
+    <div class="arrow">↓</div>
+    <div class="box">Load Active Plugins <span class="filepath">/wp-content/plugins/</span></div>
+    <div class="arrow">↓</div>
+    <div class="box">plugins_loaded <span class="filepath">wp-settings.php</span></div>
+    <div class="arrow">↓</div>
+    <div class="box">Theme functions.php <span class="filepath">/wp-content/themes/your-theme/functions.php</span></div>
+    <div class="arrow">↓</div>
+    <div class="box">after_setup_theme <span class="filepath">functions.php</span></div>
+    <div class="arrow">↓</div>
+    <div class="box">init <span class="filepath">core load: wp-includes/default-filters.php</span></div>
+    <div class="arrow">↓</div>
+    <div class="box">widgets_init <span class="filepath">functions.php / widgets.php</span></div>
+    <div class="arrow">↓</div>
+    <div class="box">wp_loaded <span class="filepath">core loaded and ready</span></div>
+  </div>
+
+  <div class="phase">
+    <h2>🖥️ FRONT-END FLOW</h2>
+    <div class="box">parse_request <span class="filepath">wp-includes/class-wp.php</span></div>
+    <div class="arrow">↓</div>
+    <div class="box">send_headers <span class="filepath">wp-includes/class-wp.php</span></div>
+    <div class="arrow">↓</div>
+    <div class="box">parse_query <span class="filepath">wp-includes/class-wp.php</span></div>
+    <div class="arrow">↓</div>
+    <div class="box">pre_get_posts <span class="filepath">Custom filter (theme/plugins)</span></div>
+    <div class="arrow">↓</div>
+    <div class="box">template_redirect <span class="filepath">wp-includes/template-loader.php</span></div>
+    <div class="arrow">↓</div>
+    <div class="box">template_include (filter) <span class="filepath">wp-includes/template-loader.php</span></div>
+    <div class="arrow">↓</div>
+    <div class="box">get_header() <span class="filepath">header.php</span></div>
+    <div class="arrow">↓</div>
+    <div class="box">the_content() <span class="filepath">template parts / the_content filter</span></div>
+    <div class="arrow">↓</div>
+    <div class="box">get_footer() <span class="filepath">footer.php</span></div>
+  </div>
+
+  <div class="phase">
+    <h2>🛠️ ADMIN PANEL FLOW</h2>
+    <div class="box">admin_menu <span class="filepath">functions.php / plugin file</span></div>
+    <div class="arrow">↓</div>
+    <div class="box">admin_init <span class="filepath">functions.php / plugin file</span></div>
+    <div class="arrow">↓</div>
+    <div class="box">current_screen <span class="filepath">wp-admin/includes/screen.php</span></div>
+    <div class="arrow">↓</div>
+    <div class="box">load-{$page_hook} <span class="filepath">Custom plugin pages</span></div>
+    <div class="arrow">↓</div>
+    <div class="box">admin_enqueue_scripts <span class="filepath">functions.php / plugin file</span></div>
+  </div>
+
+  <div class="phase">
+    <h2>📂 Major File Tree</h2>
+    <div class="tree">
+wp-config.php
+index.php
+wp-blog-header.php
+wp-load.php
+wp-settings.php
+wp-includes/
+  ├── class-wp.php
+  ├── template-loader.php
+  └── default-filters.php
+wp-content/
+  ├── mu-plugins/
+  ├── plugins/
+  └── themes/
+      └── your-theme/
+          ├── functions.php
+          ├── header.php
+          ├── footer.php
+          └── template-parts/
+    </div>
+  </div>
+
+  <div class="phase">
+    <h2>📌 Summary Notes</h2>
+    <ul>
+      <li><strong>SYSTEM BOOT</strong> is shared between frontend and admin.</li>
+      <li>After <code>wp_loaded</code>, WordPress branches into:</li>
+      <ul>
+        <li>Frontend → Template routing</li>
+        <li>Admin → Menu and screen rendering</li>
+      </ul>
+      <li><code>template_include</code> and <code>the_content</code> are filters.</li>
+      <li>All major hooks are labeled as Action or Filter for clarity.</li>
+      <li><strong>When are Action/Filter hooks available?</strong></li>
+      <ul>
+        <li>Once <code>wp-settings.php</code> is processed, and after <code>plugins_loaded</code>, WordPress has fully defined <code>add_action()</code> and <code>add_filter()</code> functions.</li>
+        <li>Hooks can be safely registered from plugins, themes, and MU-plugins starting at <code>plugins_loaded</code>.</li>
+        <li>Internally, WordPress begins registering core actions and filters inside <code>default-filters.php</code> and other files included during <code>wp-settings.php</code>.</li>
+        <li>So, by the time <code>init</code> fires, all your custom plugin/theme hooks can interact with WP internals, user session, CPTs, queries, etc.</li>
+      </ul>
+    </ul>
+  </div>
+</body>
+</html>
