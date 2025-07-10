@@ -29,7 +29,7 @@ $wpdb->update(
     "{$wpdb->prefix}posts",
     array('post_status' => 'draft', 'post_title' => 'Post Title', 'post_type' => 'post'),
     array('ID' => 1),
-    array('%s'),
+    array('%s', '%s', '%s'),
     array('%d')
 );
 
